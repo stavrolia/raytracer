@@ -5,6 +5,7 @@
 #include <cassert>
 #include "image.h"
 #include "vec3.h"
+#include "geom.h"
 
 void test_image() {
     Image image(6, 8);
@@ -54,8 +55,21 @@ void test_vec3() {
     assert(twob / 2 == b);
 }
 
+void test_geom() {
+    Sphere sp(1, {0, 0, 0});
+    Ray ray({2, 2, 2}, {1, 1, 1});
+    assert(!IsIntersected(sp, ray));
+
+    Ray another_ray({2, 2, 2}, {-1, -1, -1});
+    assert(IsIntersected(sp, another_ray));
+
+    Ray one_more_ray({10, 0, 0}, {-1, -1, -1});
+    assert(!IsIntersected(sp, one_more_ray));
+}
+
 int main() {
     test_image();
-    test_vec3();
+    test_vec3();        
+    test_geom();
     return 0;
 }
