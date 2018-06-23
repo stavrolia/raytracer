@@ -4,6 +4,7 @@
 #include <sstream>
 #include <cassert>
 #include "image.h"
+#include "vec3.h"
 
 void test_image() {
     Image image(6, 8);
@@ -37,7 +38,24 @@ void test_image() {
     assert(s.str() == expected);
 }
 
+void test_vec3() {
+    vec3 a = {1, 1, 1};
+    vec3 b = {1, 2, 3};
+    vec3 exp_sum = {2, 3, 4};
+
+    assert(a + b == exp_sum);
+    assert(a == exp_sum - b);
+    assert(a.dot(b) == 6);
+
+    vec3 twob = {2, 4, 6};
+
+    assert(b * 2 == twob);
+    assert(2 * b == twob);
+    assert(twob / 2 == b);
+}
+
 int main() {
     test_image();
+    test_vec3();
     return 0;
 }
