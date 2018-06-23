@@ -1,2 +1,3 @@
-/tagret/
-/rayracer
+/target/
+/raytracer
+*.ppm
