@@ -10,6 +10,8 @@
 #include "vec3.h"
 #include "geom.h"
 #include "camera.h"
+#include "scene.h"
+
 
 int main() {
     
@@ -24,19 +26,15 @@ int main() {
 
     Image image(640, 480);
 
-    Sphere sphere1(50, {0, 0, 0});
-    Sphere sphere2(20, {50, 0, 0});
-    color color1 = {225, 225, 0};
-    color color2 = {225, 0, 0};
+    Scene scene({0, 0, 0}, {-1, -1, 0});
+    scene.AddSphere(Sphere(50, {0, 0, 0}), {225, 225, 255});
+    //scene.AddSphere(Sphere(20, {50, 0, 0}), {225, 0, 0});
+    
 
     for (uint32_t y = 0; y < image.Height(); ++y) {
         for (uint32_t x = 0; x < image.Width(); ++x) {
             Ray ray = camera.CastRay(uniform_scale(x, image.Width()), uniform_scale(y, image.Height()));
-            double first_t = IsIntersected(sphere1, ray);
-            double second_t = IsIntersected(sphere2, ray);
-            if (std::min(first_t, second_t) != std::numeric_limits<double>::max()) {
-                image.Set(x, y, (first_t < second_t ? color1 : color2));
-            }
+            image.Set(x, y, scene.ComputeColor(ray));
         }
     }
 

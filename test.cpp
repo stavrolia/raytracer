@@ -8,6 +8,7 @@
 #include "vec3.h"
 #include "geom.h"
 #include "camera.h"
+#include "scene.h"
 
 void test_image() {
     Image image(6, 8);
@@ -95,10 +96,21 @@ void test_camera() {
     assert((test_ray.GetDirect() == vec3{1, 0, 0}));
 }
 
+/*void test_intersection_ray_and_spheres() {
+    Ray ray({0, 0, 0}, {1, 0, 0});
+    Scene scene({255, 255, 255}, light);
+    assert((scene.ComputeColor(ray) == color{255, 255, 255}));
+    scene.AddSphere(Sphere(2, {10, 0, 0}), {255, 0, 0});
+    assert((scene.ComputeColor(ray) == color{255, 0, 0}));
+    scene.AddSphere(Sphere(1, {5, 0, 0}), {255, 255, 0});
+    assert((scene.ComputeColor(ray) == color{255, 255, 0}));
+}
+*/
 int main() {
     test_image();
     test_vec3();        
     test_geom();
     test_camera();
+    // test_intersection_ray_and_spheres();
     return 0;
 }

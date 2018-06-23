@@ -7,6 +7,11 @@ struct color {
     uint8_t R;
     uint8_t G;
     uint8_t B;
+
+    friend bool operator==(color const& lhs, color const& rhs);
+    color& operator*=(double rhs);
+    friend color operator*(color lhs, double rhs);
+    friend color operator*(double lhs, color rhs);
 };
 
 class Image {
