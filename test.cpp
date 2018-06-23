@@ -3,9 +3,11 @@
 #include <string>
 #include <sstream>
 #include <cassert>
+#include <limits>
 #include "image.h"
 #include "vec3.h"
 #include "geom.h"
+#include "camera.h"
 
 void test_image() {
     Image image(6, 8);
@@ -53,23 +55,50 @@ void test_vec3() {
     assert(b * 2 == twob);
     assert(2 * b == twob);
     assert(twob / 2 == b);
+
+    vec3 long_vect1 = {0, 0, 4};
+    vec3 long_vect2 = {0, 4, 0};
+    vec3 long_vect3 = {4, 0, 0};
+
+    vec3 norm_vect1 = {0, 0, 1};
+    vec3 norm_vect2 = {0, 1, 0};
+    vec3 norm_vect3 = {1, 0, 0};
+
+    assert(norm_vect1 == long_vect1.normalized());
+    assert(norm_vect2 == long_vect2.normalized());
+    assert(norm_vect3 == long_vect3.normalized());
+
+    vec3 i = {1, 0, 0};
+    vec3 j = {0, 1, 0};
+    vec3 k = {0, 0, 1};
+
+    assert(k == i.cross(j));
+    assert(j == k.cross(i));
+    assert(i == j.cross(k));
 }
 
 void test_geom() {
     Sphere sp(1, {0, 0, 0});
     Ray ray({2, 2, 2}, {1, 1, 1});
-    assert(!IsIntersected(sp, ray));
+    assert(IsIntersected(sp, ray) == std::numeric_limits<double>::max());
 
     Ray another_ray({2, 2, 2}, {-1, -1, -1});
-    assert(IsIntersected(sp, another_ray));
+    assert(IsIntersected(sp, another_ray) != std::numeric_limits<double>::max());
 
     Ray one_more_ray({10, 0, 0}, {-1, -1, -1});
-    assert(!IsIntersected(sp, one_more_ray));
+    assert(IsIntersected(sp, one_more_ray) == std::numeric_limits<double>::max());
+}
+
+void test_camera() {
+    Ray test_ray = Camera({-100, 0, 0}, {0, 0, 0}, {0, 0, 1}, 50, 320, 240).CastRay(0, 0);
+    assert((test_ray.GetOrigin() == vec3{-100, 0, 0}));
+    assert((test_ray.GetDirect() == vec3{1, 0, 0}));
 }
 
 int main() {
     test_image();
     test_vec3();        
     test_geom();
+    test_camera();
     return 0;
 }

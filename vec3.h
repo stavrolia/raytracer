@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 
 struct vec3 {
     double x;
@@ -17,6 +18,10 @@ struct vec3 {
 
     double dot(vec3 const& rhs) const;
 
+    vec3 cross(vec3 const& rhs) const;
+
+    vec3 normalized() const;
+
     friend vec3 operator+(vec3 lhs, vec3 const& rhs);
 
     friend vec3 operator-(vec3 lhs, vec3 const& rhs);
@@ -27,3 +32,5 @@ struct vec3 {
 
     friend vec3 operator/(vec3 lhs, double rhs);
 };
+
+std::ostream& operator<<(std::ostream& os, vec3 const& rhs);

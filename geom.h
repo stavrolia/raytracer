@@ -3,15 +3,15 @@
 
 class Sphere {
 public:
-    Sphere (double rad, vec3 centre);
+    Sphere(double rad, vec3 center);
 
     double GetRad() const;
 
-    vec3 GetCentre() const;
+    vec3 GetCenter() const;
 
 private:
     double rad_;
-    vec3 centre_;
+    vec3 center_;
 };
 
 class Ray {
@@ -27,4 +27,4 @@ private:
     vec3 direct_;
 };
 
-bool IsIntersected(Sphere const& sphere, Ray const& ray);
+double IsIntersected(Sphere const& sphere, Ray const& ray);
