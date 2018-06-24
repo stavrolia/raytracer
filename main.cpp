@@ -28,7 +28,9 @@ int main() {
     Image image(640, 480);
 
     
-    Scene scene({0, 0, 0}, Light::MakePoint({0, -50, 0}));
+    Scene scene({0, 0, 0}, {0, 0, 50});
+//    scene.AddLight(Light::MakePoint({0, -50, 0}), {255, 255, 0});
+//    scene.AddLight(Light::MakePoint({0, 0, -50}), {0, 0, 255});
     scene.AddSphere(Sphere(50, {0, 0, 0}), {225, 225, 255});
     //scene.AddSphere(Sphere(20, {50, 0, 0}), {225, 0, 0});
     
@@ -40,7 +42,7 @@ int main() {
         }
     }
 
-    Outputppm(std::cout, image);
+    // Outputppm(std::cout, image);
     
     return 0;
 }

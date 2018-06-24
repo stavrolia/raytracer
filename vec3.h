@@ -20,6 +20,8 @@ struct vec3 {
 
     vec3 cross(vec3 const& rhs) const;
 
+    vec3 pointwise(vec3 const& rhs) const;
+
     vec3 normalized() const;
 
     friend vec3 operator+(vec3 lhs, vec3 const& rhs);

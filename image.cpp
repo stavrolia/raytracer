@@ -1,8 +1,17 @@
 #include "image.h"
 #include <vector>
+#include <sstream>
+#include <iostream>
+#include <iomanip>
 
 bool operator==(color const& lhs, color const& rhs) {
     return (lhs.R == rhs.R && lhs.G == rhs.G && lhs.B == rhs.B);
+}
+
+std::ostream& operator<<(std::ostream& os, color const& rhs) {
+    return os << '#' << std::setfill('0') << std::setw(2) << std::hex << static_cast<int>(rhs.R)
+              << std::setfill('0') << std::setw(2) << std::hex << static_cast<int>(rhs.G)
+              << std::setfill('0') << std::setw(2) << std::hex << static_cast<int>(rhs.B);
 }
 
 color& color::operator*=(double rhs) {

@@ -48,6 +48,10 @@ vec3 vec3::cross(vec3 const& rhs) const {
     };
 }
 
+vec3 vec3::pointwise(vec3 const& rhs) const {
+    return {x * rhs.x, y * rhs.y, z * rhs.z};
+}
+
 vec3 vec3::normalized() const {
     double sqr = (*this).dot(*this);
     assert(sqr > 0);

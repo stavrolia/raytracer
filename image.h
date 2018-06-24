@@ -2,6 +2,7 @@
 #include <vector>
 #include <cstddef>
 #include <cstdint>
+#include <sstream>
 
 struct color {
     uint8_t R;
@@ -13,6 +14,8 @@ struct color {
     friend color operator*(color lhs, double rhs);
     friend color operator*(double lhs, color rhs);
 };
+
+std::ostream& operator<<(std::ostream& os, color const& rhs);
 
 class Image {
 public:
