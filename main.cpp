@@ -6,6 +6,7 @@
 #include <limits>
 #include <cmath>
 #include <algorithm>
+#include <memory>
 #include "image.h"
 #include "vec3.h"
 #include "geom.h"
@@ -26,7 +27,8 @@ int main() {
 
     Image image(640, 480);
 
-    Scene scene({0, 0, 0}, {-1, -1, 0});
+    
+    Scene scene({0, 0, 0}, Light::MakePoint({0, -50, 0}));
     scene.AddSphere(Sphere(50, {0, 0, 0}), {225, 225, 255});
     //scene.AddSphere(Sphere(20, {50, 0, 0}), {225, 0, 0});
     
