@@ -46,7 +46,7 @@ void Outputppm(Ostream& stream, Image const& image) {
             if (!first) {
                 stream << "   ";
             }
-            auto cell = image.Get(x, y);
+            auto cell = image.Get(x, image.Height() - y - 1);
             stream << static_cast<int>(cell.R) << ' ' << static_cast<int>(cell.G) << ' ' << static_cast<int>(cell.B);
             first = false;
         }

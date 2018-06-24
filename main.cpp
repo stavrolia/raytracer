@@ -17,7 +17,7 @@
 int main() {
     
 
-    Camera camera({100, 0, 0}, {0, 0, 0}, {0, 0, 1}, 50, 320, 240);
+    Camera camera({200, 0, 0}, {0, 0, 0}, {0, 0, 1}, 50, 320, 240);
 
     // Ray test_ray2.CastRay(1, 1);
 
@@ -29,10 +29,10 @@ int main() {
 
     Scene scene({0, 0, 0}, {10, 10, 10});
     // Ray ray({0, 0, 0}, {0, 1, 0});
-    scene.AddSphere(Sphere(10, {0, 0, 0}), {255, 255, 255});
-    scene.AddSphere(Sphere(20, {0, 30, 0}), {255, 255, 255});
-
-    scene.AddLight(Light::MakePoint({0, 500, 0}), {0, 0, 255});
+    scene.AddSphere(Sphere(50, {0, 0, 0}), {255, 255, 255});
+    scene.AddSphere(Sphere(40, {0, 0, 45}), {255, 255, 255});
+    scene.AddSphere(Sphere(30, {0, 0, 80}), {255, 255, 255});
+    scene.AddLight(Light::MakePoint({200, 500, 500}), {255, 255, 255});
     // scene.AddLight(Light::MakePoint({0, 100, 100}), {0, 0, 150});
     // scene.AddLight(Light::MakePoint({0, -50, 0}), {255, 255, 0});
     // scene.AddLight(Light::MakePoint({0, 0, -50}), {0, 0, 255});
