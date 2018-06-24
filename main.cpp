@@ -14,17 +14,30 @@
 #include "scene.h"
 
 
+void DrawSnowman() {
+    Camera camera({200, 0, 0}, {0, 0, 0}, {0, 0, 1}, 50, 320, 240);
+    Image image(640, 480);
+    Scene scene({0, 0, 0}, {10, 10, 10});
+
+    scene.AddSphere(Sphere(50, {0, 0, 0}), {255, 255, 255});
+    scene.AddSphere(Sphere(40, {0, 0, 45}), {255, 255, 255});
+    scene.AddSphere(Sphere(30, {0, 0, 80}), {255, 255, 255});
+    scene.AddLight(Light::MakePoint({200, 500, 500}), {255, 255, 255});
+
+    for (uint32_t y = 0; y < image.Height(); ++y) {
+        for (uint32_t x = 0; x < image.Width(); ++x) {
+            Ray ray = camera.CastRay(uniform_scale(x, image.Width()), uniform_scale(y, image.Height()));
+            image.Set(x, y, scene.ComputeColor(ray));
+        }
+    }
+
+    Outputppm(std::cout, image);
+}
+
 int main() {
-    
+
 
     Camera camera({200, 0, 0}, {0, 0, 0}, {0, 0, 1}, 50, 320, 240);
-
-    // Ray test_ray2.CastRay(1, 1);
-
-    // std::cout << "origin: " << "\n" << test_ray2.GetOrigin();
-    // std::cout << "direct: " << "\n" << test_ray2.GetDirect();
-
-
     Image image(640, 480);
 
     Scene scene({0, 0, 0}, {10, 10, 10});
@@ -47,7 +60,7 @@ int main() {
         }
     }
 
-    Outputppm(std::cout, image);
+    //Outputppm(std::cout, image);
     
     return 0;
 }

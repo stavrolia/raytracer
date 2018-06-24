@@ -26,7 +26,7 @@ Ray Camera::CastRay(double x, double y) const {
     assert(-1 <= x && x <= 1);
     assert(-1 <= y && y <= 1);
     vec3 point_on_screen = screen_center_ + x * dx_ + y * dy_;
-    return Ray(position_, point_on_screen - position_);
+    return Ray::FromTo(position_, point_on_screen);
 }
 
 double uniform_scale(uint32_t coord, uint32_t scale) {

@@ -18,6 +18,8 @@ class Ray {
 public:
     Ray(vec3 origin, vec3 direct);
 
+    static Ray FromTo(vec3 const& start, vec3 const& finish);
+
     vec3 GetOrigin() const;
 
     vec3 GetDirect() const;

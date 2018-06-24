@@ -21,6 +21,10 @@ Ray::Ray(vec3 origin, vec3 direct)
     : origin_(origin)
     , direct_(direct.normalized()) {}
 
+Ray Ray::FromTo(vec3 const& start, vec3 const& finish) {
+    return Ray(start, finish - start);
+}
+
 vec3 Ray::GetOrigin() const {
     return origin_;
 }
