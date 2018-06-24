@@ -1,6 +1,9 @@
 #include "light.h"
 #include "vec3.h"
+#include "geom.h"
 #include <memory>
+#include <limits>
+#include <cmath>
 
 namespace {
 struct ParallelLight : Light {
@@ -10,6 +13,10 @@ public:
 
     vec3 Direction(vec3 const& point_on_sphere) override  {
         return (-1) * direction_;
+    }
+
+    double CoefTOfRay(Ray const& ray) override {
+        return std::numeric_limits<double>::max();
     }
 
 private:
@@ -22,7 +29,12 @@ public:
         : source_(source) {}
 
     vec3 Direction(vec3 const& point_on_sphere) override  {
-        return (point_on_sphere - source_).normalized();
+        return (source_ - point_on_sphere).normalized();
+    }
+
+    double CoefTOfRay(Ray const& ray) override {
+        auto focus = source_ - ray.GetOrigin();
+        return std::sqrt(focus.dot(focus));
     }
 
 private:

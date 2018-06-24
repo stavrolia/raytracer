@@ -27,11 +27,13 @@ int main() {
 
     Image image(640, 480);
 
-    Scene scene({0, 0, 0}, {0, 0, 0});
+    Scene scene({0, 0, 0}, {10, 10, 10});
     // Ray ray({0, 0, 0}, {0, 1, 0});
-    scene.AddSphere(Sphere(50, {0, 50, 0}), {255, 255, 255});
-    scene.AddLight(Light::MakePoint({0, 100, 100}), {0, 0, 100});
-    scene.AddLight(Light::MakePoint({0, 100, 100}), {0, 0, 150});
+    scene.AddSphere(Sphere(10, {0, 0, 0}), {255, 255, 255});
+    scene.AddSphere(Sphere(20, {0, 30, 0}), {255, 255, 255});
+
+    scene.AddLight(Light::MakePoint({0, 500, 0}), {0, 0, 255});
+    // scene.AddLight(Light::MakePoint({0, 100, 100}), {0, 0, 150});
     // scene.AddLight(Light::MakePoint({0, -50, 0}), {255, 255, 0});
     // scene.AddLight(Light::MakePoint({0, 0, -50}), {0, 0, 255});
     // scene.AddSphere(Sphere(50, {0, 0, 0}), {225, 225, 255});
@@ -45,7 +47,7 @@ int main() {
         }
     }
 
-    // Outputppm(std::cout, image);
+    Outputppm(std::cout, image);
     
     return 0;
 }

@@ -5,6 +5,7 @@
 #include <cmath>
 #include <memory>
 #include "light.h"
+#include <utility>
 
 namespace{
 vec3 ColorToVec3(color const& from_color) {
@@ -44,9 +45,7 @@ void Scene::AddLight(std::unique_ptr<Light> light, color const& color_of_light) 
     light_colors_.push_back(ColorToVec3(color_of_light));
 }
 
-
-
-color Scene::ComputeColor(Ray const& ray) const {
+std::pair<size_t, double> Scene::FindTheNearestSphere(Ray const& ray) const {
     size_t ind_min = 0;
     double t_min = std::numeric_limits<double>::max();
 
@@ -58,16 +57,34 @@ color Scene::ComputeColor(Ray const& ray) const {
         }
     }
 
-    if (t_min == std::numeric_limits<double>::max()) {
+    return std::make_pair(ind_min, t_min);
+}
+
+color Scene::ComputeColor(Ray const& ray) const {
+    auto ind_and_t = FindTheNearestSphere(ray);
+
+    if (ind_and_t.second == std::numeric_limits<double>::max()) {
         return Vec3ToColor(background_);
     }
-    vec3 accumulate = ambient_light_.pointwise(sphere_colors_[ind_min]);
-    vec3 point_on_sphere = ray.GetOrigin() + t_min * ray.GetDirect();
-    vec3 normal = (point_on_sphere - spheres_[ind_min].GetCenter()).normalized();
+
+    auto color_nearest_sphere = sphere_colors_[ind_and_t.first];
+    vec3 accumulate = ambient_light_.pointwise(color_nearest_sphere);
+    vec3 point_on_sphere = ray.GetOrigin() + ind_and_t.second * ray.GetDirect();
+    vec3 normal = (point_on_sphere - spheres_[ind_and_t.first].GetCenter()).normalized();
+
     for (size_t i = 0; i < light_colors_.size(); ++i) { 
-        vec3 vec_light = lights_[i]->Direction(point_on_sphere); 
+        vec3 vec_light = lights_[i]->Direction(point_on_sphere);
+        Ray ray_of_light(point_on_sphere, vec_light);
+        double t_of_light = lights_[i]->CoefTOfRay(ray_of_light);
+        auto barrier = FindTheNearestSphere(ray_of_light);
+        if (barrier.second < t_of_light) {
+            continue;
+        }
+
         double factor = normal.dot(vec_light);
-        accumulate += factor < 0 ? background_ : factor * sphere_colors_[ind_min].pointwise(light_colors_[i]);
+        accumulate += factor < 0 
+            ? background_ 
+            : factor * color_nearest_sphere.pointwise(light_colors_[i]);
     }
     return Vec3ToColor(accumulate);
     

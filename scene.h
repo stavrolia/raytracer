@@ -5,6 +5,7 @@
 #include <memory>
 #include "light.h"
 #include <vector>
+#include <utility>
 
 class Scene {
 public:
@@ -13,6 +14,8 @@ public:
     void AddSphere(Sphere const& sphere, color const& sphere_color);
 
     void AddLight(std::unique_ptr<Light> light, color const& color_of_light);
+
+    std::pair<size_t, double> FindTheNearestSphere(Ray const& ray) const;
 
     color ComputeColor(Ray const& ray) const;
 
