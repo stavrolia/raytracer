@@ -106,11 +106,22 @@ void test_intersection_ray_and_spheres() {
     assert((scene.ComputeColor(ray) == color{0, 255, 255}));
 }
 
+void test_compose_of_light_sources() {
+    Scene scene({0, 0, 0}, {0, 0, 0});
+    Ray ray({0, 0, 0}, {0, 1, 0});
+    scene.AddSphere(Sphere(5, {0, 50, 0}), {255, 255, 255});
+    scene.AddLight(Light::MakePoint({0, 50, 50}), {255, 0, 0});
+    scene.AddLight(Light::MakePoint({0, 50, 50}), {0, 255, 0});
+    assert(scene.ComputeColor(ray) == color({25, 25, 0}));
+
+}
+
 int main() {
     test_image();
     test_vec3();        
     test_geom();
     test_camera();
     test_intersection_ray_and_spheres();
+    test_compose_of_light_sources();
     return 0;
 }

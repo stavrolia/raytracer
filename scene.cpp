@@ -24,9 +24,10 @@ uint8_t To8BitColor(double value) {
     }
     return value * 255;
 }
-}
+
 color Vec3ToColor(vec3 const& from_vec) {
     return {To8BitColor(from_vec.x), To8BitColor(from_vec.y), To8BitColor(from_vec.z)};
+}
 }
 
 Scene::Scene(color const& background, color const& ambient_light)
