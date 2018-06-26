@@ -73,7 +73,8 @@ color Scene::ComputeColor(Ray const& ray) const {
     auto color_nearest_surface = surfaces_colors_[surface_ind];
     vec3 accumulate = ambient_light_.pointwise(color_nearest_surface);
     vec3 point_on_surface = ray.GetOrigin() + ind_and_t.second * vec_from_viewer;
-    vec3 normal = surfaces_[surface_ind]->ComputeNormal(point_on_surface);  //////
+    vec3 normal = surfaces_[surface_ind]->ComputeNormal(point_on_surface);
+    point_on_surface += 0.000001 * normal;
 
     for (size_t i = 0; i < light_colors_.size(); ++i) { 
         vec3 vec_light = lights_[i]->Direction(point_on_surface);
