@@ -35,9 +35,14 @@ Scene::Scene(color const& background, color const& ambient_light)
     : background_(ColorToVec3(background))
     , ambient_light_(ColorToVec3(ambient_light)) {}
 
-void Scene::AddSphere(Sphere const& sphere, color const& sphere_color) {
+void Scene::AddSphere(Sphere const& sphere, color const& sphere_color, double shininess) {
     spheres_.push_back(sphere);
     sphere_colors_.push_back(ColorToVec3(sphere_color));
+    sphere_shininesses_.push_back(shininess);
+}
+
+void Scene::AddSphere(Sphere const& sphere, color const& sphere_color) {
+    AddSphere(sphere, sphere_color, 10);
 }
 
 void Scene::AddLight(std::unique_ptr<Light> light, color const& color_of_light) {
@@ -62,15 +67,17 @@ std::pair<size_t, double> Scene::FindTheNearestSphere(Ray const& ray) const {
 
 color Scene::ComputeColor(Ray const& ray) const {
     auto ind_and_t = FindTheNearestSphere(ray);
+    auto sphere_ind = ind_and_t.first;
 
     if (ind_and_t.second == std::numeric_limits<double>::max()) {
         return Vec3ToColor(background_);
     }
 
-    auto color_nearest_sphere = sphere_colors_[ind_and_t.first];
+    vec3 vec_from_viewer = ray.GetDirect();
+    auto color_nearest_sphere = sphere_colors_[sphere_ind];
     vec3 accumulate = ambient_light_.pointwise(color_nearest_sphere);
-    vec3 point_on_sphere = ray.GetOrigin() + ind_and_t.second * ray.GetDirect();
-    vec3 normal = (point_on_sphere - spheres_[ind_and_t.first].GetCenter()).normalized();
+    vec3 point_on_sphere = ray.GetOrigin() + ind_and_t.second * vec_from_viewer;
+    vec3 normal = (point_on_sphere - spheres_[sphere_ind].GetCenter()).normalized();
 
     for (size_t i = 0; i < light_colors_.size(); ++i) { 
         vec3 vec_light = lights_[i]->Direction(point_on_sphere);
@@ -81,10 +88,19 @@ color Scene::ComputeColor(Ray const& ray) const {
             continue;
         }
 
+
         double factor = normal.dot(vec_light);
+        vec3 reflect = 2 * factor * normal - vec_light;
+        double coef_of_reflect = reflect.dot((-1) * vec_from_viewer);
+        if (coef_of_reflect > 0) {
+            coef_of_reflect = std::pow(coef_of_reflect, sphere_shininesses_[sphere_ind]);
+        } else {
+            coef_of_reflect = 0;
+        }
+
         accumulate += factor < 0 
             ? background_ 
-            : factor * color_nearest_sphere.pointwise(light_colors_[i]);
+            : (coef_of_reflect + factor) * color_nearest_sphere.pointwise(light_colors_[i]);
     }
     return Vec3ToColor(accumulate);
     

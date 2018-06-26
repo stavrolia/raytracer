@@ -11,6 +11,8 @@ class Scene {
 public:
     Scene(color const& background, color const& ambient_light);
 
+    void AddSphere(Sphere const& sphere, color const& sphere_color, double shininess);
+    
     void AddSphere(Sphere const& sphere, color const& sphere_color);
 
     void AddLight(std::unique_ptr<Light> light, color const& color_of_light);
@@ -22,6 +24,7 @@ public:
 private:
     std::vector<Sphere> spheres_;
     std::vector<vec3> sphere_colors_;
+    std::vector<double> sphere_shininesses_;
     vec3 background_;
     vec3 ambient_light_;
     std::vector<std::unique_ptr<Light>> lights_;
