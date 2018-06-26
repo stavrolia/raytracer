@@ -17,6 +17,18 @@ vec3 Sphere::GetCenter() const {
     return center_;
 }
 
+Plane::Plane(vec3 const&  normal, vec3 const& point)
+    : normal_(normal)
+    , point_(point) {}
+
+Plane Plane::FromPointAndTwoVectors(vec3 const& point, vec3 const& alpha, vec3 const& beta) {
+    return Plane(alpha.pointwise(beta).normalized(), point);
+}
+
+Plane Plane::FromThreePoints(vec3 const& a, vec3 const& b, vec3 const& c) {
+    return FromPointAndTwoVectors(a, b - a, c - a);
+}
+
 Ray::Ray(vec3 origin, vec3 direct)
     : origin_(origin)
     , direct_(direct.normalized()) {}
@@ -45,3 +57,7 @@ double IsIntersected(Sphere const& sphere, Ray const& ray) {
     double t = (-half_b - std::sqrt(half_d)) / a;
     return (t < 0 ? std::numeric_limits<double>::max() : (-half_b - std::sqrt(half_d)) / a);
 }
+
+// double IsIntersected(Plane const& plane, Ray const& ray) {
+
+// }
