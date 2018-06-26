@@ -19,9 +19,9 @@ void DrawSnowman() {
     Image image(640, 480);
     Scene scene({0, 0, 0}, {10, 10, 10});
 
-    scene.AddSphere(Sphere(50, {0, 0, 0}), {255, 255, 255});
-    scene.AddSphere(Sphere(40, {0, 0, 45}), {255, 255, 255});
-    scene.AddSphere(Sphere(30, {0, 0, 80}), {255, 255, 255});
+    scene.AddSurface(Surface::MakeSphere(50, {0, 0, 0}), {255, 255, 255});
+    scene.AddSurface(Surface::MakeSphere(40, {0, 0, 45}), {255, 255, 255});
+    scene.AddSurface(Surface::MakeSphere(30, {0, 0, 80}), {255, 255, 255});
     scene.AddLight(Light::MakePoint({200, 500, 500}), {255, 255, 255});
 
     for (uint32_t y = 0; y < image.Height(); ++y) {
@@ -42,7 +42,7 @@ int main() {
 
     Scene scene({0, 0, 0}, {10, 10, 10});
     // Ray ray({0, 0, 0}, {0, 1, 0});
-    scene.AddSphere(Sphere(150, {0, 0, 0}), {255, 255, 255}, 51.37);
+    scene.AddSurface(Surface::MakeSphere(150, {0, 0, 0}), {255, 255, 255});
     // scene.AddSphere(Sphere(40, {0, 0, 45}), {255, 255, 255});
     // scene.AddSphere(Sphere(30, {0, 0, 80}), {255, 255, 255});
     scene.AddLight(Light::MakePoint({200, 500, 500}), {255, 0, 0});

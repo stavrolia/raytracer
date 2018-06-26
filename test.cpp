@@ -9,6 +9,7 @@
 #include "geom.h"
 #include "camera.h"
 #include "scene.h"
+#include "ray.h"
 
 void test_image() {
     Image image(6, 8);
@@ -79,15 +80,20 @@ void test_vec3() {
 }
 
 void test_geom() {
-    Sphere sp(1, {0, 0, 0});
+    auto sp = Surface::MakeSphere(1, {0, 0, 0});
+    auto pl = Surface::MakePlane({0, 0, 0}, {0, 0, 1});
     Ray ray({2, 2, 2}, {1, 1, 1});
-    assert(sp.IsIntersected(ray) == std::numeric_limits<double>::max());
+    assert(sp->IsIntersected(ray) == std::numeric_limits<double>::max());
+    assert(pl->IsIntersected(ray) == std::numeric_limits<double>::max());
 
     Ray another_ray({2, 2, 2}, {-1, -1, -1});
-    assert(sp.IsIntersected(another_ray) != std::numeric_limits<double>::max());
+    assert(sp->IsIntersected(another_ray) != std::numeric_limits<double>::max());
+    assert(pl->IsIntersected(another_ray) != std::numeric_limits<double>::max());
 
     Ray one_more_ray({10, 0, 0}, {-1, -1, -1});
-    assert(sp.IsIntersected(one_more_ray) == std::numeric_limits<double>::max());
+    assert(sp->IsIntersected(one_more_ray) == std::numeric_limits<double>::max());
+
+
 }
 
 void test_camera() {
@@ -100,16 +106,16 @@ void test_intersection_ray_and_spheres() {
     Ray ray({0, 0, 0}, {1, 0, 0});
     Scene scene({255, 255, 255}, {0, 255, 255});
     assert((scene.ComputeColor(ray) == color{255, 255, 255}));
-    scene.AddSphere(Sphere(2, {10, 0, 0}), {255, 255, 0});
+    scene.AddSurface(Surface::MakeSphere(2, {10, 0, 0}), {255, 255, 0});
     assert((scene.ComputeColor(ray) == color{0, 255, 0}));
-    scene.AddSphere(Sphere(1, {5, 0, 0}), {0, 255, 255});
+    scene.AddSurface(Surface::MakeSphere(1, {5, 0, 0}), {0, 255, 255});
     assert((scene.ComputeColor(ray) == color{0, 255, 255}));
 }
 
 void test_compose_of_light_sources() {
     Scene scene({0, 0, 0}, {0, 0, 0});
     Ray ray({100, 0, 0}, {-1, 0, 0});
-    scene.AddSphere(Sphere(5, {0, 0, 0}), {255, 255, 255});
+    scene.AddSurface(Surface::MakeSphere(5, {0, 0, 0}), {255, 255, 255});
     scene.AddLight(Light::MakePoint({50, 0, 0}), {255, 0, 0});
     scene.AddLight(Light::MakePoint({50, 0, 0}), {0, 255, 0});
     assert(scene.ComputeColor(ray) == color({255, 255, 0}));
@@ -118,8 +124,8 @@ void test_compose_of_light_sources() {
 void test_light_occlussion() {
     Scene scene({0, 0, 0}, {0, 0, 0});
 
-    scene.AddSphere(Sphere(5, {0, 0, 0}), {255, 255, 255});
-    scene.AddSphere(Sphere(5, {0, 10, 0}), {255, 255, 255});
+    scene.AddSurface(Surface::MakeSphere(5, {0, 0, 0}), {255, 255, 255});
+    scene.AddSurface(Surface::MakeSphere(5, {0, 10, 0}), {255, 255, 255});
 
     scene.AddLight(Light::MakePoint({0, -100, 0}), {255, 255, 255});
     scene.AddLight(Light::MakePoint({0, 100, 0}), {255, 255, 255});

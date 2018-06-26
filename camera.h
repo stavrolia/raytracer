@@ -1,6 +1,7 @@
 #pragma once
 #include "vec3.h"
 #include "geom.h"
+#include "ray.h"
 
 class Camera {
 public:

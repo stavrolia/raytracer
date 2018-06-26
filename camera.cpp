@@ -1,5 +1,6 @@
 #include "camera.h"
 #include <cassert>
+#include "ray.h"
 
 namespace {
     vec3 ComputeScreenCenter(vec3 const& position, vec3 const& look_at, double focus) {

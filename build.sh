@@ -9,8 +9,9 @@ $CC geom.cpp  -c -o target/geom.o
 $CC camera.cpp  -c -o target/camera.o
 $CC scene.cpp  -c -o target/scene.o
 $CC light.cpp  -c -o target/light.o
+$CC ray.cpp  -c -o target/ray.o
 
-OBJ="target/camera.o target/vec3.o target/light.o target/scene.o target/image.o target/geom.o"
+OBJ="target/ray.o target/camera.o target/vec3.o target/light.o target/scene.o target/image.o target/geom.o"
 $CC test.cpp  -c -o target/test.o
 $CC $OBJ target/test.o -o target/test
 ./target/test
