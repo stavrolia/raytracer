@@ -55,7 +55,7 @@ std::pair<size_t, double> Scene::FindTheNearestSphere(Ray const& ray) const {
     double t_min = std::numeric_limits<double>::max();
 
     for (size_t i = 0; i < spheres_.size(); ++i) {
-        double current_t = IsIntersected(spheres_[i], ray);
+        double current_t = spheres_[i].IsIntersected(ray);
         if (current_t < t_min) {
             t_min = current_t;
             ind_min = i;
@@ -77,7 +77,7 @@ color Scene::ComputeColor(Ray const& ray) const {
     auto color_nearest_sphere = sphere_colors_[sphere_ind];
     vec3 accumulate = ambient_light_.pointwise(color_nearest_sphere);
     vec3 point_on_sphere = ray.GetOrigin() + ind_and_t.second * vec_from_viewer;
-    vec3 normal = (point_on_sphere - spheres_[sphere_ind].GetCenter()).normalized();
+    vec3 normal = spheres_[sphere_ind].ComputeNormal(point_on_sphere);
 
     for (size_t i = 0; i < light_colors_.size(); ++i) { 
         vec3 vec_light = lights_[i]->Direction(point_on_sphere);

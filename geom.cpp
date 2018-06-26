@@ -9,12 +9,8 @@ Sphere::Sphere(double rad, vec3 center)
         assert(rad_ > 0);
     }
 
-double Sphere::GetRad() const {
-    return rad_;
-}
-
-vec3 Sphere::GetCenter() const {
-    return center_;
+vec3 Sphere::ComputeNormal(vec3 point_on_sphere) const {
+    return (point_on_sphere - center_).normalized();
 }
 
 Plane::Plane(vec3 const&  normal, vec3 const& point)
@@ -45,11 +41,11 @@ vec3 Ray::GetDirect() const {
     return direct_;
 }
 
-double IsIntersected(Sphere const& sphere, Ray const& ray) {
-    vec3 O_O = ray.GetOrigin() - sphere.GetCenter(); 
+double Sphere::IsIntersected(Ray const& ray) const {
+    vec3 O_O = ray.GetOrigin() - center_; 
     double a = ray.GetDirect().dot(ray.GetDirect());
     double half_b = O_O.dot(ray.GetDirect());
-    double c = O_O.dot(O_O) - sphere.GetRad() * sphere.GetRad();
+    double c = O_O.dot(O_O) - rad_ * rad_;
     double half_d = half_b * half_b - a * c;
     if (half_d < 0) {
         return std::numeric_limits<double>::max();
@@ -59,5 +55,4 @@ double IsIntersected(Sphere const& sphere, Ray const& ray) {
 }
 
 // double IsIntersected(Plane const& plane, Ray const& ray) {
-
 // }

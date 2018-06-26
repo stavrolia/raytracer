@@ -81,13 +81,13 @@ void test_vec3() {
 void test_geom() {
     Sphere sp(1, {0, 0, 0});
     Ray ray({2, 2, 2}, {1, 1, 1});
-    assert(IsIntersected(sp, ray) == std::numeric_limits<double>::max());
+    assert(sp.IsIntersected(ray) == std::numeric_limits<double>::max());
 
     Ray another_ray({2, 2, 2}, {-1, -1, -1});
-    assert(IsIntersected(sp, another_ray) != std::numeric_limits<double>::max());
+    assert(sp.IsIntersected(another_ray) != std::numeric_limits<double>::max());
 
     Ray one_more_ray({10, 0, 0}, {-1, -1, -1});
-    assert(IsIntersected(sp, one_more_ray) == std::numeric_limits<double>::max());
+    assert(sp.IsIntersected(one_more_ray) == std::numeric_limits<double>::max());
 }
 
 void test_camera() {
