@@ -36,9 +36,10 @@ Scene::Scene(color const& background, color const& ambient_light)
     : background_(ColorToVec3(background))
     , ambient_light_(ColorToVec3(ambient_light)) {}
 
-void Scene::AddSurface(std::unique_ptr<Surface> surface, color const& surface_color) {
+void Scene::AddSurface(std::unique_ptr<Surface> surface, color const& surface_color, double shine) {
     surfaces_.emplace_back(std::move(surface));
     surfaces_colors_.push_back(ColorToVec3(surface_color));
+    surface_shininesses_.push_back(shine);
 }
 
 void Scene::AddLight(std::unique_ptr<Light> light, color const& color_of_light) {
@@ -74,7 +75,7 @@ color Scene::ComputeColor(Ray const& ray) const {
     vec3 accumulate = ambient_light_.pointwise(color_nearest_surface);
     vec3 point_on_surface = ray.GetOrigin() + ind_and_t.second * vec_from_viewer;
     vec3 normal = surfaces_[surface_ind]->ComputeNormal(point_on_surface);
-    point_on_surface += 0.000001 * normal;
+    point_on_surface += 0.000001 * normal; // magical magic
 
     for (size_t i = 0; i < light_colors_.size(); ++i) { 
         vec3 vec_light = lights_[i]->Direction(point_on_surface);
@@ -87,29 +88,18 @@ color Scene::ComputeColor(Ray const& ray) const {
 
 
         double factor = normal.dot(vec_light);
-        // vec3 reflect = 2 * factor * normal - vec_light;
-        // double coef_of_reflect = reflect.dot((-1) * vec_from_viewer);
-        // if (coef_of_reflect > 0) {
-        //     coef_of_reflect = std::pow(coef_of_reflect, sphere_shininesses_[sphere_ind]);
-        // } else {
-        //     coef_of_reflect = 0;
-        // }
+        vec3 reflect = 2 * factor * normal - vec_light;
+        double coef_of_reflect = reflect.dot((-1) * vec_from_viewer);
+        if (coef_of_reflect > 0) {
+            coef_of_reflect = std::pow(coef_of_reflect, surface_shininesses_[surface_ind]);
+        } else {
+            coef_of_reflect = 0;
+        }
 
         accumulate += factor < 0 
             ? background_ 
-            : (/*coef_of_reflect + */factor) * color_nearest_surface.pointwise(light_colors_[i]);
+            : (coef_of_reflect + factor) * color_nearest_surface.pointwise(light_colors_[i]);
     }
     return Vec3ToColor(accumulate);
     
 }
-
-
-// void Scene::AddSphere(Sphere const& sphere, color const& sphere_color, double shininess) {
-//     spheres_.push_back(sphere);
-//     sphere_colors_.push_back(ColorToVec3(sphere_color));
-//     sphere_shininesses_.push_back(shininess);
-// }
-
-// void Scene::AddSphere(Sphere const& sphere, color const& sphere_color) {
-//     AddSphere(sphere, sphere_color, 10);
-// }

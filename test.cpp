@@ -106,16 +106,16 @@ void test_intersection_ray_and_spheres() {
     Ray ray({0, 0, 0}, {1, 0, 0});
     Scene scene({255, 255, 255}, {0, 255, 255});
     assert((scene.ComputeColor(ray) == color{255, 255, 255}));
-    scene.AddSurface(Surface::MakeSphere(2, {10, 0, 0}), {255, 255, 0});
+    scene.AddSurface(Surface::MakeSphere(2, {10, 0, 0}), {255, 255, 0}, 50);
     assert((scene.ComputeColor(ray) == color{0, 255, 0}));
-    scene.AddSurface(Surface::MakeSphere(1, {5, 0, 0}), {0, 255, 255});
+    scene.AddSurface(Surface::MakeSphere(1, {5, 0, 0}), {0, 255, 255}, 50);
     assert((scene.ComputeColor(ray) == color{0, 255, 255}));
 }
 
 void test_compose_of_light_sources() {
     Scene scene({0, 0, 0}, {0, 0, 0});
     Ray ray({100, 0, 0}, {-1, 0, 0});
-    scene.AddSurface(Surface::MakeSphere(5, {0, 0, 0}), {255, 255, 255});
+    scene.AddSurface(Surface::MakeSphere(5, {0, 0, 0}), {255, 255, 255}, 50);
     scene.AddLight(Light::MakePoint({50, 0, 0}), {255, 0, 0});
     scene.AddLight(Light::MakePoint({50, 0, 0}), {0, 255, 0});
     assert(scene.ComputeColor(ray) == color({255, 255, 0}));
@@ -124,8 +124,8 @@ void test_compose_of_light_sources() {
 void test_light_occlussion() {
     Scene scene({0, 0, 0}, {0, 0, 0});
 
-    scene.AddSurface(Surface::MakeSphere(5, {0, 0, 0}), {255, 255, 255});
-    scene.AddSurface(Surface::MakeSphere(5, {0, 10, 0}), {255, 255, 255});
+    scene.AddSurface(Surface::MakeSphere(5, {0, 0, 0}), {255, 255, 255}, 50);
+    scene.AddSurface(Surface::MakeSphere(5, {0, 10, 0}), {255, 255, 255}, 50);
 
     scene.AddLight(Light::MakePoint({0, -100, 0}), {255, 255, 255});
     scene.AddLight(Light::MakePoint({0, 100, 0}), {255, 255, 255});

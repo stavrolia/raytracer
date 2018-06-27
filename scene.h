@@ -12,7 +12,7 @@ class Scene {
 public:
     Scene(color const& background, color const& ambient_light);
 
-    void AddSurface(std::unique_ptr<Surface> surface, color const& surface_color);
+    void AddSurface(std::unique_ptr<Surface> surface, color const& surface_color, double shine);
 
     void AddLight(std::unique_ptr<Light> light, color const& color_of_light);
 
@@ -23,7 +23,7 @@ public:
 private:
     std::vector<std::unique_ptr<Surface>> surfaces_;
     std::vector<vec3> surfaces_colors_;
-    std::vector<double> sphere_shininesses_;
+    std::vector<double> surface_shininesses_;
     vec3 background_;
     vec3 ambient_light_;
     std::vector<std::unique_ptr<Light>> lights_;
